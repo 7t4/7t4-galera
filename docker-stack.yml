@@ -1,0 +1,21 @@
+version: "3.1"
+
+services:
+
+  data:
+    image: gregnuj/mariadb-galera-swarm
+    environment:
+      - MYSQL_ROOT_PASSWORD=dont_use_this
+    networks:
+      - data-net
+    volumes:
+      - data-dv:/var/lib/mysql
+    deploy:
+      mode: global
+
+volumes:
+  data-dv:
+
+networks:
+  data-net:
+    driver: overlay
