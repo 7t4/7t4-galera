@@ -5,11 +5,12 @@ RUN addgroup -g 1001 -S mysql && \
     adduser -u 1001 -S mysql -G mysql
 
 
-#RUN mkdir /docker-entrypoint-initdb.d && \
-RUN apk -U upgrade && \
+RUN mkdir /var/run/mysqld && \
+    apk -U upgrade && \
     apk add --no-cache mariadb mariadb-client && \
     apk add --no-cache tzdata bash su-exec && \
     chown -R mysql:mysql /etc/mysql && \
+    chown -R mysql:mysql /var/run/mysqld && \
     rm -rf /var/cache/apk/*
 
 
