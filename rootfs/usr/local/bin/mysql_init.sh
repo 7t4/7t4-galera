@@ -10,7 +10,7 @@ declare MYSQLD=( $@ )
 function mysql_init_install(){
     mkdir -p "$(mysql_datadir)"
     chown -R mysql:mysql "$(mysql_datadir)"
-    mysql_install_db --user=mysql --datadir="$(mysql_datadir)" --rpm 
+    mysql_install_db --auth-root-socket-user=mysql --datadir="$(mysql_datadir)" --rpm "${@:2}"
 }
 
 function mysql_init_start(){
@@ -19,7 +19,7 @@ function mysql_init_start(){
 }
 
 function mysql_init_client(){
-    mysql=( mysql --protocol=socket -uroot -hlocalhost --socket=/var/run/mysqld/mysqld.sock )
+    mysql=( mysql --protocol=socket -umysql -hlocalhost --socket=/var/run/mysqld/mysqld.sock )
     if [ ! -z "$MYSQLD_INIT_ROOT" ]; then
         mysql+=( -p"${MYSQLD_INIT_ROOT}" )
     fi
@@ -109,13 +109,13 @@ function main(){
     echo "Initailizing new database"
     mysql_init_install
     mysql_init_start
-    mysql_init_check 
-    mysql_init_root 
-    mysql_init_tz 
-    mysql_init_user 
+    mysql_init_check
+    mysql_init_root
+    mysql_init_tz
+    mysql_init_user
     mysql_init_database
     mysql_init_wsrep
-    mysql_init_scripts 
+    mysql_init_scripts
     mysql_shutdown
     echo "Initailizing database completed"
 }
