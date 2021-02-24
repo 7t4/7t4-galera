@@ -29,7 +29,7 @@ if [[ ! -z "$WANTHELP" ]]; then
 fi
 
 # allow the container to be started with `--user`
-# uh.. or if root run as mysql
+# uh.. or if root run as mysql ??
 if [[ "$(id -u)" = '0' ]]; then
     exec su-exec mysql "$BASH_SOURCE" "$@"
 fi

@@ -14,7 +14,7 @@ RUN mkdir /var/run/mysqld && \
     rm -rf /var/cache/apk/*
 
 
-USER 1001
+#USER 1001
 
 # we expose all Cluster related Ports
 # 3306: default MySQL/MariaDB listening port
