@@ -1,21 +1,29 @@
-version: "3.1"
-
+version: '3.8'
 services:
-
-  data:
-    image: gregnuj/mariadb-galera-swarm
-    environment:
-      - MYSQL_ROOT_PASSWORD=dont_use_this
+  galera:
+    image: t3tech/7t4-galera:latest
     networks:
-      - data-net
-    volumes:
-      - data-dv:/var/lib/mysql
+      - dbnet
+    environment:
+      - MYSQL_ROOT_PASSWORD="rootpass"
+      - MYSQL_USER="mariadb"
+      - MYSQL_PASSWORD="userpass"
+      - MYSQL_DATABASE="data"
     deploy:
-      mode: global
-
-volumes:
-  data-dv:
+      replicas: 3
+      placement:
+        constraints:
+ #       - node.labels.type == primary
+        - node.role == worker
+        - node.labels.db == true
+    volumes:
+      - /srv/db/galera/db:/var/lib/mysql
+      - /srv/db/galera/conf:/etc/mysql
 
 networks:
-  data-net:
-    driver: overlay
+  dbnet:
+    external:
+      name: dbnet
+#  proxy:
+#    external:
+#      name: proxy

@@ -1,7 +1,7 @@
 # MariaDb Galera Cluster
 
 This image is based on `Alpine:latest` with mariadb from Alpine apk repo. That may change to building from mariadb source.
-##This build may or may not currently work. 
+## This build may or may not currently work. 
 
 The original source of this project was based on the official Docker `mariadb:10.1` image and is designed to be
 compatible with auto-scheduling systems, specifically Docker Swarm Mode (1.13+).

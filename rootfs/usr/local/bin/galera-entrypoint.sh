@@ -18,7 +18,7 @@ if [[ "${1:0:1}" = '-' ]]; then
     set -- mysqld "$@"
 fi
 
-# command is not mysqld 
+# command is not mysqld
 if [[ $1 != 'mysqld' && $1 != 'mysqld_safe' ]]; then
     exec "$@"
 fi
@@ -29,11 +29,12 @@ if [[ ! -z "$WANTHELP" ]]; then
 fi
 
 # allow the container to be started with `--user`
+# uh.. or if root run as mysql
 if [[ "$(id -u)" = '0' ]]; then
-    exec gosu mysql "$BASH_SOURCE" "$@"
+    exec su-exec mysql "$BASH_SOURCE" "$@"
 fi
 
-# Set env MYSQLD_INIT to trigger setup 
+# Set env MYSQLD_INIT to trigger setup
 if [[ ! -d "$(mysql_datadir)/mysql" ]]; then
     MYSQLD_INIT=${MYSQLD_INIT:=1}
 fi
