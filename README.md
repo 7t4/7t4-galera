@@ -1,7 +1,7 @@
 # MariaDb Galera Cluster
 
 This image is based on `Alpine:latest` with mariadb from Alpine apk repo. That may change to building from mariadb source.
-## This build may or may not currently work. 
+## This build may or may not currently work.
 
 The original source of this project was based on the official Docker `mariadb:10.1` image and is designed to be
 compatible with auto-scheduling systems, specifically Docker Swarm Mode (1.13+).
@@ -9,6 +9,7 @@ However, it could also work with manual scheduling (`docker run`) by specifying 
 environment variables or possibly other scheduling systems that use similar conventions.
 
 By using DNS resolution to discover other nodes they don't have to be specified explicitly.
+Task 1 for the service is the default galera bootstrap node. 
 
 ### Example (Docker 1.13 Swarm Mode)
 
@@ -18,12 +19,13 @@ By using DNS resolution to discover other nodes they don't have to be specified 
 
 ### Environment Variables
 
+NOTE: some of these may be off (compare `mysql_init.sh`)
 maria/mysql vars (`mysql_common.sh`)
  - `MYSQL_CONFD` (defaults to /etc/mysql/conf.d)
  - `MYSQL_DATABASE` (optional - defaults to substring before - in `SERVICE_NAME`)
  - `MYSQL_PASSWORD` (optional - defaults to hash based on `MYSQL_USER` and `MYSQL_ROOT_PASSSWORD`)
  - `MYSQL_ROOT_PASSWORD` (optional - defaults to random)
- - `MYSQL_USER` (optional - dfaults to `MYSQL_DATABASE` name)
+ - `MYSQL_USER` (optional - defaults to `MYSQL_DATABASE` name)
  - `DATADIR` (defaults to /var/lib/mysql)
 
 Cluster vars (`cluster_common.sh`)

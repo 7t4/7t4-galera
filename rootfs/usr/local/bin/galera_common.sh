@@ -47,7 +47,7 @@ function wsrep_cluster_port(){
     echo "${WSREP_CLUSTER_PORT}"
 }
 
-# discovered from docker_info.SERVICE_MEMBERS using CLUSTER_MINIMUM 
+# discovered from docker_info.SERVICE_MEMBERS using CLUSTER_MINIMUM
 function wsrep_cluster_members(){
     WSREP_CLUSTER_MINIMUM=$(wsrep_cluster_minimum)
     while [[ -z "${WSREP_CLUSTER_MEMBERS}" ]]; do
@@ -76,15 +76,25 @@ function wsrep_cluster_members(){
     echo "${WSREP_CLUSTER_MEMBERS}"
 }
 
-# Defaults to lowest ip in Cluster members
+
 function wsrep_pc_address(){
     if [[ -z "${WSREP_PC_ADDRESS}" ]]; then
-        WSREP_PC_ADDRESS=$(echo "$(wsrep_cluster_members)" | cut -d ',' -f 1 )
+        # DEPRECATED: Defaults to lowest ip in Cluster members
+        # WSREP_PC_ADDRESS=$(echo "$(wsrep_cluster_members)" | cut -d ',' -f 1 )
+    # Default: Find addr of Task 1 in the service list
+     for MEMBER in $CLUSTER_MEMBERS  do
+         if [ `echo $(fqdn) | awk -F. '{print $2}'` = "1" ]; then
+           export WSREP_PC_ADDRESS="gcomm://$MEMBER?pc.wait_prim=yes"
+           break
+         else
+           echo "Failed 😫"
+         fi
+     done
     fi
     echo "${WSREP_PC_ADDRESS}"
 }
 
-# Defaults 
+# Defaults
 function wsrep_pc_weight(){
     WSREP_CLUSTER_MINIMUM="$(wsrep_cluster_minimum)"
     if [[ -z "${WSREP_PC_WEIGHT}" ]]; then
@@ -152,7 +162,7 @@ function cluster_position(){
     else
     	CLUSTER_POSITION="$(cluster_uuid):$(cluster_seqno)"
     fi
-    echo "$CLUSTER_POSITION" 
+    echo "$CLUSTER_POSITION"
 }
 
 function cluster_seqno(){
@@ -170,7 +180,7 @@ function cluster_uuid(){
 }
 
 function cluster_stb(){
-    if [[ -z "${CLUSTER_STB}" ]]; then 
+    if [[ -z "${CLUSTER_STB}" ]]; then
         GRASTATE_DAT="$(grastate_dat)"
     fi
     echo "$CLUSTER_STB"
@@ -210,5 +220,3 @@ function main(){
 }
 
 main "$@"
-
-

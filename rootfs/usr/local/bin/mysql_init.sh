@@ -10,7 +10,10 @@ declare MYSQLD=( $@ )
 function mysql_init_install(){
     mkdir -p "$(mysql_datadir)"
     chown -R mysql:mysql "$(mysql_datadir)"
-    mysql_install_db --auth-root-socket-user=mysql --datadir="$(mysql_datadir)" --rpm "${@:2}"
+    mysql_install_db --auth-root-socket-user=mysql --datadir="$(mysql_datadir)" --rpm
+    # "${@:2}" has been added to end of the above
+    # mysql_install_db cmd in official mariadb scripts
+    # not sure if we need it here
 }
 
 function mysql_init_start(){
@@ -21,7 +24,7 @@ function mysql_init_start(){
 function mysql_init_client(){
     mysql=( mysql --protocol=socket -umysql -hlocalhost --socket=/var/run/mysqld/mysqld.sock )
     if [ ! -z "$MYSQLD_INIT_ROOT" ]; then
-        mysql+=( -p"${MYSQLD_INIT_ROOT}" )
+        mysql+=( -p"$(mysql_password root)" )
     fi
     echo "${mysql[@]}"
 }
@@ -73,7 +76,8 @@ function mysql_init_user(){
     SERVICE_NAME="${SERVICE_NAME:="$(service_name)"}"
     MYSQL_DATABASE="${MYSQL_DATABASE:="${SERVICE_NAME%-*}"}"
     MYSQL_USER="${MYSQL_USER:="${MYSQL_DATABASE}"}"
-    MYSQL_PASSWORD="$(mysql_password $MYSQL_USER)"
+  #  MYSQL_PASSWORD="$(mysql_password $MYSQL_USER)"
+    MYSQL_PASSWORD="${MYSQL_PASSWORD:="$MYSQL_USER"}"
     echo "CREATE USER '$MYSQL_USER'@'%' IDENTIFIED BY '$MYSQL_PASSWORD' ;" | "${mysql[@]}"
     echo "GRANT ALL ON \`$MYSQL_DATABASE\`.* TO '$MYSQL_USER'@'%' ;" | "${mysql[@]}"
     echo 'FLUSH PRIVILEGES ;' | "${mysql[@]}"
