@@ -82,7 +82,8 @@ function wsrep_pc_address(){
         # DEPRECATED: Defaults to lowest ip in Cluster members
         # WSREP_PC_ADDRESS=$(echo "$(wsrep_cluster_members)" | cut -d ',' -f 1 )
     # Default: Find addr of Task 1 in the service list
-     for MEMBER in $CLUSTER_MEMBERS  do
+     for MEMBER in $CLUSTER_MEMBERS
+      do
          if [ `echo $(fqdn) | awk -F. '{print $2}'` = "1" ]; then
            export WSREP_PC_ADDRESS="gcomm://$MEMBER?pc.wait_prim=yes"
            break
