@@ -5,10 +5,10 @@ services:
     networks:
       - dbnet
     environment:
-      - MYSQL_ROOT_PASSWORD="rootpass"
-      - MYSQL_USER="mariadb"
-      - MYSQL_PASSWORD="userpass"
-      - MYSQL_DATABASE="data"
+      - MYSQL_ROOT_PASSWORD=rootpass
+      - MYSQL_USER=mariadb
+      - MYSQL_PASSWORD=userpass
+      - MYSQL_DATABASE=data
     deploy:
       replicas: 3
       placement:
@@ -22,8 +22,8 @@ services:
 
 networks:
   dbnet:
-    external:
-      name: dbnet
+    external: true
+    name: dbnet
 #  proxy:
 #    external:
 #      name: proxy

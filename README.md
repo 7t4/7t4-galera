@@ -9,7 +9,7 @@ However, it could also work with manual scheduling (`docker run`) by specifying 
 environment variables or possibly other scheduling systems that use similar conventions.
 
 By using DNS resolution to discover other nodes they don't have to be specified explicitly.
-Task 1 for the service is the default galera bootstrap node. 
+Task 1 for the service is the default galera bootstrap node.
 
 ### Example (Docker 1.13 Swarm Mode)
 
@@ -46,7 +46,7 @@ Cluster vars (`cluster_common.sh`)
 
 
 Docker swarm vars (`swarm_common.sh`)
- - `CONTAINER_NAME` (defaults to coantiner name in stack/compose file)
+ - `CONTAINER_NAME` (defaults to container name in stack/compose file)
  - `FQDN` (defaults to eth0 docker dns fqdn)
  - `NODE_ADDRESS` (optional - defaults to ip address of eth0)
  - `SERVICE_COUNT` (optional - defaults to number of SERVICE_MEMBERS)

@@ -7,12 +7,12 @@ source galera_common.sh
 cat <<-EOF > "$(galera_cnf)"
 [mysqld]
 log-error=/dev/stderr
-skip_name_resolve
+#skip_name_resolve
 
 # InnoDB
 default_storage_engine = InnoDB
 innodb_autoinc_lock_mode=2
-innodb-buffer-pool-size=26G
+innodb-buffer-pool-size=1G
 innodb_file_per_table=1
 innodb-flush-log-at-trx-commit=0
 innodb-flush-method=O_DIRECT
@@ -36,7 +36,7 @@ slow-query-log-file = /dev/stderr
 [galera]
 wsrep_on=ON
 #wsrep-node-name=$(wsrep_node_name)
-wsrep_node_address=$(wsrep_node_address)
+#wsrep_node_address=$(wsrep_node_address)
 wsrep-cluster-name=$(wsrep_cluster_name)
 wsrep-cluster-address=$(wsrep_cluster_address)
 wsrep-max-ws-size=1024K
