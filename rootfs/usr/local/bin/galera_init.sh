@@ -12,12 +12,13 @@ log-error=/dev/stderr
 # InnoDB
 default_storage_engine = InnoDB
 innodb_autoinc_lock_mode=2
-innodb-buffer-pool-size=1G
+innodb-buffer-pool-size=256M
 innodb_file_per_table=1
 innodb-flush-log-at-trx-commit=0
 innodb-flush-method=O_DIRECT
 innodb_locks_unsafe_for_binlog=1
-innodb-log-file-size=512M
+#innodb-log-file-size=512M
+#innodb_log_buffer_size=8M
 innodb-log-files-in-group=2
 
 # Logs

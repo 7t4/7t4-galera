@@ -11,7 +11,16 @@ RUN mkdir /var/run/mysqld && \
     apk add --no-cache tzdata bash su-exec && \
     chown -R mysql:mysql /etc/mysql && \
     chown -R mysql:mysql /var/run/mysqld && \
-    rm -rf /var/cache/apk/*
+    rm -rf /var/cache/apk/* && \
+    # always run as user mysql
+    sed -i '/^\[mysqld]$/a user=mysql' /etc/my.cnf && \
+    # allow custom configurations
+    echo -e '\n!includedir /etc/mysql/conf.d/' >> /etc/my.cnf
+    
+    # using a vol bind mount to /etc/mysql
+    #mkdir -p /etc/mysql/conf.d/
+
+
 
 
 #USER 1001

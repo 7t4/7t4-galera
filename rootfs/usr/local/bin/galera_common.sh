@@ -85,7 +85,9 @@ function wsrep_pc_address(){
      for MEMBER in $CLUSTER_MEMBERS
       do
          if [ `echo $(fqdn) | awk -F. '{print $2}'` = "1" ]; then
-           export WSREP_PC_ADDRESS="gcomm://$MEMBER?pc.wait_prim=yes"
+           #export WSREP_PC_ADDRESS="gcomm://$MEMBER?pc.wait_prim=yes"
+           export WSREP_PC_ADDRESS=$MEMBER
+           echo "${WSREP_PC_ADDRESS}"
            break
          else
            echo "Failed 😫"
