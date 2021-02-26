@@ -52,6 +52,9 @@ fi
 # create galera.cnf
 if [[ ! -z "${GALERA_INIT}" ]]; then
     source "galera_init.sh"
+else
+  # update cluster addresses, etc.
+  source "update_conf.sh"
 fi
 
 # Attempt recovery if possible

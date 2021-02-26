@@ -19,7 +19,7 @@ services:
     volumes:
       - /srv/db/galera/db:/var/lib/mysql
       - /srv/db/galera/conf:/etc/mysql
-
+      - /srv/db/galera/logs:/var/log/mysql
 networks:
   dbnet:
     external: true
