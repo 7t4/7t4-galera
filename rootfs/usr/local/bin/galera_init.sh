@@ -6,7 +6,7 @@ source galera_common.sh
 
 cat <<-EOF > "$(galera_cnf)"
 [mysqld]
-log-error=/dev/stderr
+#log-error=/dev/stderr
 #skip_name_resolve
 
 # InnoDB
@@ -26,12 +26,11 @@ binlog-format=row
 log-bin=binlog
 sync-binlog=0
 log_slave_updates
-#log-error = /var/log/mysql/mysql-error.log
-log-error = /dev/stderr
+log-error = /var/log/mysql/mysql-error.log
 log-queries-not-using-indexes=1
 slow-query-log = 1
-#slow-query-log-file = /var/log/mysql/mysql-slow.log
-slow-query-log-file = /dev/stderr
+slow-query-log-file = /var/log/mysql/mysql-slow.log
+
 
 # Galera-related settings #
 [galera]
@@ -46,7 +45,7 @@ wsrep_slave_threads=4
 wsrep_sst_method=$(wsrep_sst_method)
 wsrep-sst-auth=$(wsrep_sst_auth)
 
-wsrep-provider=/usr/lib/galera/libgalera_smm.so
+wsrep-provider=/usr/lib/libgalera_smm.so
 wsrep-provider-options="debug=${WSREP_DEBUG}"
 wsrep_provider_options="evs.keepalive_period = PT3S"
 wsrep_provider_options="evs.suspect_timeout = P60S"
