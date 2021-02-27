@@ -59,7 +59,7 @@ function service_members(){
   # we assume the output format for nslookup is uniform
 #    SERVICE_MEMBERS="$(getent hosts tasks.$(service_name) | cut -d ' ' -f 1 | while read ip; do nslookup $ip | awk -v "ip=$ip" '(NR == 5){print ip,$0}'; done | sort -k3 | awk -v 'ORS=,' '{print $1}')"
 #    SERVICE_MEMBERS="${SERVICE_MEMBERS%%,}" # strip trailing commas
-    SERVICE_MEMBERS="$(nslookup tasks.$(service_name) | grep Addr | grep -v :53 | awk '{print $2}')"
+    SERVICE_MEMBERS="$(nslookup tasks.$(service_name) | grep Addr | grep -v :53 | awk '{print $2}' | paste -s -d, -)"
     echo "${SERVICE_MEMBERS}"
 }
 

@@ -73,7 +73,7 @@ function wsrep_cluster_members(){
 	  WSREP_CLUSTER_MEMBERS="${SERVICE_NAME}"
        fi
     done
-    echo "${WSREP_CLUSTER_MEMBERS/$'\n'/','}"
+    echo "${WSREP_CLUSTER_MEMBERS}"
 }
 
 
