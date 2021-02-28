@@ -81,7 +81,7 @@ function wsrep_pc_address(){
     if [[ -z "${WSREP_PC_ADDRESS}" ]]; then
         # DEPRECATED: Defaults to lowest ip in Cluster members
         # WSREP_PC_ADDRESS=$(echo "$(wsrep_cluster_members)" | cut -d ',' -f 1 )
-    IFS=$','
+    IFS=','
     # Default: Find addr of Task 1 in the service list
      for MEMBER in $WSREP_CLUSTER_MEMBERS
       do
@@ -143,7 +143,7 @@ function wsrep_sst_auth(){
 #      whether this node really has primary status.
 #      ehh, for now this is sufficient.
 function is_primary_component(){
-    if [[ "$(wsrep_pc_address)" == $(wsrep_node_address) ]]; then
+    if [[ $(wsrep_pc_address) == $(wsrep_node_address) ]]; then
         echo "true"
     else
         sleep 60
