@@ -79,23 +79,22 @@ function wsrep_cluster_members(){
 
 function wsrep_pc_address(){
     if [[ -z "${WSREP_PC_ADDRESS}" ]]; then
-        # DEPRECATED: Defaults to lowest ip in Cluster members
+        # Defaults to lowest ip in Cluster members
         # WSREP_PC_ADDRESS=$(echo "$(wsrep_cluster_members)" | cut -d ',' -f 1 )
+    CLUSTER_MEMBERS="$(wsrep_cluster_members)"
     IFS=','
     # Default: Find addr of Task 1 in the service list
-     for MEMBER in $WSREP_CLUSTER_MEMBERS
+     for MEMBER in $CLUSTER_MEMBERS
       do
-         if [ `echo $(fqdn) | awk -F. '{print $2}'` = "1" ]; then
+        MFQDN="$(nslookup "$MEMBER" | awk -F'= ' 'NR==5 { print $2 }')"
+         if [ `echo $MFQDN | awk -F. '{print $2}'` = "1" ]; then
            #export WSREP_PC_ADDRESS="gcomm://$MEMBER?pc.wait_prim=yes"
            export WSREP_PC_ADDRESS=$MEMBER
            echo "${WSREP_PC_ADDRESS}"
            break
-         else
-           echo "Failed 😫"
          fi
      done
     fi
-    echo "${WSREP_PC_ADDRESS}"
 }
 
 # Defaults
@@ -146,7 +145,7 @@ function is_primary_component(){
     if [[ $(wsrep_pc_address) == $(wsrep_node_address) ]]; then
         echo "true"
     else
-        sleep 60
+        sleep 30
     fi
 }
 
