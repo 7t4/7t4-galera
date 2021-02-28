@@ -113,23 +113,28 @@ function wsrep_pc_weight(){
 
 #
 function wsrep_sst_method(){
-    WSREP_SST_METHOD="${WSREP_SST_METHOD:="xtrabackup-v2"}"
+  #  WSREP_SST_METHOD="${WSREP_SST_METHOD:="xtrabackup-v2"}"
+   WSREP_SST_METHOD="${WSREP_SST_METHOD:="mariabackup"}"
     echo "${WSREP_SST_METHOD}"
 }
 
 function wsrep_sst_user(){
-    WSREP_SST_USER="${WSREP_SST_USER:="xtrabackup"}"
+    #WSREP_SST_USER="${WSREP_SST_USER:="xtrabackup"}"
+    WSREP_SST_USER="${WSREP_SST_USER:="mariabackup"}"
     echo "${WSREP_SST_USER}"
 }
 
+# set default to be same on all nodes rather than random
 function wsrep_sst_password(){
-    WSREP_SST_PASSWORD="${WSREP_SST_PASSWORD:="$(mysql_password "$(wsrep_sst_user)")"}"
+    #WSREP_SST_PASSWORD="${WSREP_SST_PASSWORD:="$(mysql_password "$(wsrep_sst_user)")"}"
+    WSREP_SST_PASSWORD="${WSREP_SST_PASSWORD:="$(service_name)"}"
     echo "${WSREP_SST_PASSWORD}"
 }
 
 #
 function wsrep_sst_auth(){
     WSREP_SST_AUTH="${WSREP_SST_AUTH:="$(wsrep_sst_user):$(wsrep_sst_password)"}"
+    #WSREP_SST_AUTH="${WSREP_SST_AUTH:="$(wsrep_sst_user):"}"
     echo "${WSREP_SST_AUTH}"
 }
 
@@ -140,9 +145,9 @@ function wsrep_sst_auth(){
 function is_primary_component(){
     if [[ "$(wsrep_pc_address)" == $(wsrep_node_address) ]]; then
         echo "true"
+    else
+        sleep 60
     fi
-  else
-    sleep 60
 }
 
 # Defaults to galera_auto.cnf

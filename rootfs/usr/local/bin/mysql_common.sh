@@ -25,7 +25,8 @@ function mysql_user(){
 }
 
 function wsrep_user(){
-    WSREP_USER="${WSREP_USER:="xtrabackup"}"
+    #WSREP_USER="${WSREP_USER:="xtrabackup"}"
+    WSREP_USER="${WSREP_USER:="mariabackup"}"
     echo "$WSREP_USER"
 }
 

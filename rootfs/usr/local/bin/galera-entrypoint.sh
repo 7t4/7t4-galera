@@ -62,12 +62,24 @@ if [[ -f "$(grastate_dat)" ]]; then
     mysqld ${cmd[@]:1} --wsrep-recover
 fi
 
-if [[ ! -z $(is_primary_component) ]]; then
-    if [[ -f "$(grastate_dat)" ]]; then
-        sed -i -e 's/^safe_to_bootstrap: *0/safe_to_bootstrap: 1/' $(grastate_dat)
-    fi
+#TODO: clean this up
+# bootstrap
+if [ "$CLUSTER_STB" == "1" ]; then
+  # appears that entire cluster was shutdown normally
+  # or grastate.dat was manually edited
     cmd+=( " --wsrep-new-cluster" )
+elif [[ "$GALERA_INIT" == "1" ]]; then
+  # new node, see if we are task 1 of service
+  if [[ ! -z $(is_primary_component) ]]; then
+# TODO: this needs to go elsewhere with 
+# additional logic to handle crashed cluster scenario
+    # if [[ -f "$(grastate_dat)" ]]; then
+    #   sed -i -e 's/^safe_to_bootstrap: *0/safe_to_bootstrap: 1/' $(grastate_dat)
+    # fi
+  cmd+=( " --wsrep-new-cluster" )
+  fi
 fi
+
 
 #tail -f /var/log/mysql/error.log &
 exec ${cmd[*]} 2>&1

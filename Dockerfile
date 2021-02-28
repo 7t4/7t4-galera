@@ -7,7 +7,7 @@ RUN addgroup -g 1001 -S mysql && \
 
 RUN mkdir /var/run/mysqld && \
     apk -U upgrade && \
-    apk add --no-cache mariadb mariadb-client && \
+    apk add --no-cache mariadb mariadb-client mariadb-backup && \
     apk add --no-cache tzdata bash su-exec && \
     apk add galera --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ && \
     chown -R mysql:mysql /etc/mysql && \
@@ -17,7 +17,7 @@ RUN mkdir /var/run/mysqld && \
     sed -i '/^\[mysqld]$/a user=mysql' /etc/my.cnf && \
     # allow custom configurations
     echo -e '\n!includedir /etc/mysql/conf.d/' >> /etc/my.cnf
-    
+
     # using a vol bind mount to /etc/mysql
     #mkdir -p /etc/mysql/conf.d/
 
