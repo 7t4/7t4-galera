@@ -83,7 +83,7 @@ function wsrep_pc_address(){
         # WSREP_PC_ADDRESS=$(echo "$(wsrep_cluster_members)" | cut -d ',' -f 1 )
     IFS=$','
     # Default: Find addr of Task 1 in the service list
-     for MEMBER in $CLUSTER_MEMBERS
+     for MEMBER in $WSREP_CLUSTER_MEMBERS
       do
          if [ `echo $(fqdn) | awk -F. '{print $2}'` = "1" ]; then
            #export WSREP_PC_ADDRESS="gcomm://$MEMBER?pc.wait_prim=yes"
@@ -126,8 +126,8 @@ function wsrep_sst_user(){
 
 # set default to be same on all nodes rather than random
 function wsrep_sst_password(){
-    #WSREP_SST_PASSWORD="${WSREP_SST_PASSWORD:="$(mysql_password "$(wsrep_sst_user)")"}"
-    WSREP_SST_PASSWORD="${WSREP_SST_PASSWORD:="$(service_name)"}"
+    WSREP_SST_PASSWORD="${WSREP_SST_PASSWORD:="$(mysql_password "$(wsrep_sst_user)")"}"
+    #WSREP_SST_PASSWORD="${WSREP_SST_PASSWORD:="$(service_name)"}"
     echo "${WSREP_SST_PASSWORD}"
 }
 

@@ -64,14 +64,14 @@ fi
 
 #TODO: clean this up
 # bootstrap
-if [ "$CLUSTER_STB" == "1" ]; then
+if [ "$(cluster_stb)" == "1" ]; then
   # appears that entire cluster was shutdown normally
   # or grastate.dat was manually edited
     cmd+=( " --wsrep-new-cluster" )
-elif [[ "$GALERA_INIT" == "1" ]]; then
+elif [[ "${GALERA_INIT}" == "1" ]]; then
   # new node, see if we are task 1 of service
-  if [[ ! -z $(is_primary_component) ]]; then
-# TODO: this needs to go elsewhere with 
+  if [[ ! -z "$(is_primary_component)" ]]; then
+# TODO: this needs to go elsewhere with
 # additional logic to handle crashed cluster scenario
     # if [[ -f "$(grastate_dat)" ]]; then
     #   sed -i -e 's/^safe_to_bootstrap: *0/safe_to_bootstrap: 1/' $(grastate_dat)
@@ -80,6 +80,6 @@ elif [[ "$GALERA_INIT" == "1" ]]; then
   fi
 fi
 
-
+echo "entry passing to $cmd"
 #tail -f /var/log/mysql/error.log &
 exec ${cmd[*]} 2>&1
