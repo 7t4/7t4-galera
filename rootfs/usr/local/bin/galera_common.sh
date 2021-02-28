@@ -81,6 +81,7 @@ function wsrep_pc_address(){
     if [[ -z "${WSREP_PC_ADDRESS}" ]]; then
         # DEPRECATED: Defaults to lowest ip in Cluster members
         # WSREP_PC_ADDRESS=$(echo "$(wsrep_cluster_members)" | cut -d ',' -f 1 )
+    IFS=$','
     # Default: Find addr of Task 1 in the service list
      for MEMBER in $CLUSTER_MEMBERS
       do
@@ -133,10 +134,15 @@ function wsrep_sst_auth(){
 }
 
 # This is primary
+#TODO: we should probably be including grastate.dat in this check for
+#      whether this node really has primary status.
+#      ehh, for now this is sufficient.
 function is_primary_component(){
     if [[ "$(wsrep_pc_address)" == $(wsrep_node_address) ]]; then
         echo "true"
     fi
+  else
+    sleep 60
 }
 
 # Defaults to galera_auto.cnf
