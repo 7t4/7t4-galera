@@ -70,10 +70,10 @@ fi
 # Either node crashed or...
 # we are using host vol bind mounts and have started on a host already running a container.
 # Other methods of preventing the latter should be enforced so we don't have to consider that case here.
-if [[ -f "$(gvwstate_dat)" ]]; then
+#if [[ -f "$(gvwstate_dat)" ]]; then
 # do we need to decide if safe_to_bootstrap?? or will galera figure it out?
 #    mysqld ${cmd[@]:1} --wsrep-recover
-fi
+#fi
 
 # bootstrap
 if [ "$(cluster_stb)" == "1" ]; then
