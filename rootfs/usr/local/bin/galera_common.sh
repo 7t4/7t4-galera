@@ -166,6 +166,17 @@ function grastate_dat(){
     echo "${GRASTATE_DAT}"
 }
 
+# Defaults to /var/lib/mysql/gvwstate.dat
+function gvwstate_dat(){
+    GVWSTATE_DAT="${GVWSTATE_DAT:="$(mysql_datadir)/gvwstate.dat"}"
+    if [[ -f "$GVWSTATE_DAT" ]]; then
+        CLUSTER_UUID="$(awk '/^my_uuid:/{print $2}' $GVWSTATE_DAT)"
+        CLUSTER_STB="$(awk '/^bootstrap:/{print $2}' $GVWSTATE_DAT)"
+      #  CLUSTER_SEQNO="$(awk '/^seqno:/{print $2}' $GVWSTATE_DAT)"
+    fi
+    echo "${GVWSTATE_DAT}"
+}
+
 function cluster_position(){
     GRASTATE_DAT="$(grastate_dat)"
     if [[ "$CLUSTER_UUID" == '00000000-0000-0000-0000-000000000000' ]]; then

@@ -52,32 +52,34 @@ fi
 # create galera.cnf
 if [[ ! -z "${GALERA_INIT}" ]]; then
     source "galera_init.sh"
+    # new node, see if we are task 1 of service
+    if [[ ! -z "$(is_primary_component)" ]]; then
+       cmd+=( " --wsrep-new-cluster" )
+    fi
 else
   # update cluster addresses, etc.
   source "update_conf.sh"
 fi
 
+#TODO: Is this necessary???
 # Attempt recovery if possible
 if [[ -f "$(grastate_dat)" ]]; then
     mysqld ${cmd[@]:1} --wsrep-recover
 fi
 
-#TODO: clean this up
+# Either node crashed or...
+# we are using host vol bind mounts and have started on a host already running a container.
+# Other methods of preventing the latter should be enforced so we don't have to consider that case here.
+if [[ -f "$(gvwstate_dat)" ]]; then
+# do we need to decide if safe_to_bootstrap?? or will galera figure it out?
+#    mysqld ${cmd[@]:1} --wsrep-recover
+fi
+
 # bootstrap
 if [ "$(cluster_stb)" == "1" ]; then
   # appears that entire cluster was shutdown normally
   # or grastate.dat was manually edited
     cmd+=( " --wsrep-new-cluster" )
-elif [[ "${GALERA_INIT}" == "1" ]]; then
-  # new node, see if we are task 1 of service
-  if [[ ! -z "$(is_primary_component)" ]]; then
-# TODO: this needs to go elsewhere with
-# additional logic to handle crashed cluster scenario
-    # if [[ -f "$(grastate_dat)" ]]; then
-    #   sed -i -e 's/^safe_to_bootstrap: *0/safe_to_bootstrap: 1/' $(grastate_dat)
-    # fi
-  cmd+=( " --wsrep-new-cluster" )
-  fi
 fi
 
 echo "entry passing to $cmd"

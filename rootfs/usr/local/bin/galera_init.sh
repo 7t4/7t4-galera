@@ -24,10 +24,10 @@ binlog-format=row
 log-bin=binlog
 sync-binlog=0
 log_slave_updates
-log-error = /var/log/mysql/mysql-error.log
+#log-error = /var/log/mysql/mysql-error.log
 log-queries-not-using-indexes=1
 slow-query-log = 1
-slow-query-log-file = /var/log/mysql/mysql-slow.log
+#slow-query-log-file = /var/log/mysql/mysql-slow.log
 
 
 # Galera-related settings #
