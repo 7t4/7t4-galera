@@ -209,7 +209,7 @@ function cluster_uuid(){
 
 # double check since the default is declared as 0
 function cluster_stb(){
-    if [[ -z "${CLUSTER_STB}" -o "${CLUSTER_STB}"=="0" ]]; then
+    if [[ -z "${CLUSTER_STB}" || "${CLUSTER_STB}"=="0" ]]; then
         GRASTATE_DAT="$(grastate_dat)"
         CLUSTER_STB="$(awk '/^safe_to_bootstrap:/{print $2}' $GRASTATE_DAT)"
     fi
