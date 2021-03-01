@@ -140,12 +140,12 @@ function wsrep_sst_auth(){
 # This is primary
 #TODO: we should probably be including grastate.dat in this check for
 #      whether this node really has primary status.
-#      ehh, for now this is sufficient.
+#      ehh, for now this is sufficient since it's only being called on init
 function is_primary_component(){
     if [[ $(wsrep_pc_address) == $(wsrep_node_address) ]]; then
         echo "true"
     else
-        sleep 30
+        sleep 10
     fi
 }
 
@@ -159,6 +159,8 @@ function galera_cnf(){
 function grastate_dat(){
     GRASTATE_DAT="${GRASTATE_DAT:="$(mysql_datadir)/grastate.dat"}"
     if [[ -f "$GRASTATE_DAT" ]]; then
+      # These may not be returned properly
+      # (eg calling cluster_stb doesn't return CLUSTER_STB value from here)
         CLUSTER_UUID="$(awk '/^uuid:/{print $2}' $GRASTATE_DAT)"
         CLUSTER_STB="$(awk '/^safe_to_bootstrap:/{print $2}' $GRASTATE_DAT)"
         CLUSTER_SEQNO="$(awk '/^seqno:/{print $2}' $GRASTATE_DAT)"
@@ -192,6 +194,7 @@ function cluster_position(){
 function cluster_seqno(){
     if [[ -z "${CLUSTER_SEQNO}" ]]; then :
         GRASTATE_DAT="$(grastate_dat)"
+        CLUSTER_SEQNO="$(awk '/^seqno:/{print $2}' $GRASTATE_DAT)"
     fi
     echo "$CLUSTER_SEQNO"
 }
@@ -199,13 +202,16 @@ function cluster_seqno(){
 function cluster_uuid(){
     if [[ -z "${CLUSTER_UUID}" ]]; then :
         GRASTATE_DAT="$(grastate_dat)"
+        CLUSTER_UUID="$(awk '/^uuid:/{print $2}' $GRASTATE_DAT)"
     fi
     echo "$CLUSTER_UUID"
 }
 
+# double check since the default is declared as 0
 function cluster_stb(){
-    if [[ -z "${CLUSTER_STB}" ]]; then
+    if [[ -z "${CLUSTER_STB}" -o "${CLUSTER_STB}"=="0" ]]; then
         GRASTATE_DAT="$(grastate_dat)"
+        CLUSTER_STB="$(awk '/^safe_to_bootstrap:/{print $2}' $GRASTATE_DAT)"
     fi
     echo "$CLUSTER_STB"
 }
