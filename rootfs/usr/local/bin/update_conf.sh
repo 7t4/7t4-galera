@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-if [[]]
+
 sed 's%wsrep-cluster-address=% wsrep-cluster-address=${wsrep_cluster_address}%' $(galera_cnf)
 
 
