@@ -31,7 +31,8 @@ fi
 # allow the container to be started with `--user`
 # uh.. or if root run as mysql ??
 if [[ "$(id -u)" = '0' ]]; then
-    exec su-exec mysql "$BASH_SOURCE" "$@"
+    su-exec mysql "$BASH_SOURCE" "$@"
+   exit 1
 fi
 
 # Set env MYSQLD_INIT to trigger setup
