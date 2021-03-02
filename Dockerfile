@@ -13,10 +13,9 @@ RUN mkdir /var/run/mysqld && \
     chown -R mysql:mysql /etc/mysql && \
     chown -R mysql:mysql /var/run/mysqld && \
     rm -rf /var/cache/apk/* && \
-    # always run as user mysql
-    sed -i '/^\[mysqld]$/a user=mysql' /etc/my.cnf && \
-    # allow custom configurations
-    echo -e '\n!includedir /etc/mysql/conf.d/' >> /etc/my.cnf
+    sed -i '/!includedir /c !includedir /etc/mysql/conf.d/' /etc/my.cnf
+    # Overwrite default include path which includes a cnf containing skip-networking
+    # echo -e '\n!includedir /etc/mysql/conf.d/' >> /etc/my.cnf
 
     # using a vol bind mount to /etc/mysql
     #mkdir -p /etc/mysql/conf.d/

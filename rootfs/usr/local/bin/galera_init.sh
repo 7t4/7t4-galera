@@ -6,6 +6,7 @@ source galera_common.sh
 
 cat <<-EOF > "$(galera_cnf)"
 [mysqld]
+user=mysql
 #log-error=/dev/stderr
 #skip_name_resolve
 
