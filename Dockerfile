@@ -8,7 +8,7 @@ RUN addgroup -g 1001 -S mysql && \
 RUN mkdir /var/run/mysqld && \
     apk -U upgrade && \
     apk add --no-cache tzdata bash su-exec socat iproute2-ss pv && \
-    apk add --no-cache mariadb mariadb-client mariadb-backup && \
+    apk add --no-cache mariadb mariadb-client mariadb-backup mariadb-server-utils && \
     apk add galera --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing/ && \
     chown -R mysql:mysql /etc/mysql && \
     chown -R mysql:mysql /var/run/mysqld && \

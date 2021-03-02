@@ -88,7 +88,7 @@ else
   while [[ -z $(is_cluster_up) && $SLOOP -le 10 ]]; do
     echo "Waiting for cluster..."
     SLOOP=$((SLOOP + 1))
-    sleep 10
+    sleep 3
   done
 fi
 
