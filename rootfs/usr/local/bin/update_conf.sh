@@ -2,7 +2,7 @@
 
 
 sed -i '/wsrep-cluster-address=/c wsrep-cluster-address='$(wsrep_cluster_address)'' $(galera_cnf)
-
+sed -i '/wsrep-node-name=/c wsrep-node-name='$(wsrep_node_name)'' $(galera_cnf)
 #if [[ -n "$DEBUG" ]]; then
 #  env > /var/log/mysql/env-debug.log
 #fi

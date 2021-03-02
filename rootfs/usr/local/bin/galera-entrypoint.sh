@@ -62,7 +62,7 @@ else
   source "update_conf.sh"
 fi
 
-#TODO: Is this necessary???
+#TODO: Is this necessary??? maybe on a restart?
 # Attempt recovery if possible
 if [[ -f "$(grastate_dat)" ]]; then
     mysqld ${cmd[@]:1} --wsrep-recover
@@ -76,13 +76,22 @@ fi
 #    mysqld ${cmd[@]:1} --wsrep-recover
 #fi
 
-# bootstrap
-if [ "$(cluster_stb)" == "1" ]; then
+if [[ $(is_cluster_up) ]]; then
+  # simple check for port 3306 on task 1's ip
+  echo "Join running cluster..."
+elif [ "$(cluster_stb)" == "1" ]; then
   # appears that entire cluster was shutdown normally
   # or grastate.dat was manually edited
-    cmd+=( " --wsrep-new-cluster" )
+  echo "Bootstrap..."
+  cmd+=( " --wsrep-new-cluster" )
+else
+  while [[ -z $(is_cluster_up) && $SLOOP -le 10 ]]; do
+    echo "Waiting for cluster..."
+    SLOOP=$((SLOOP + 1))
+    sleep 10
+  done
 fi
 
-echo "entry passing to $cmd"
+echo "Entrypoint passing to $cmd"
 #tail -f /var/log/mysql/error.log &
 exec ${cmd[*]} 2>&1

@@ -33,7 +33,7 @@ slow-query-log = 1
 # Galera-related settings #
 [galera]
 wsrep_on=ON
-#wsrep-node-name=$(wsrep_node_name)
+wsrep-node-name=$(wsrep_node_name)
 #wsrep_node_address=$(wsrep_node_address)
 wsrep-cluster-name=$(wsrep_cluster_name)
 wsrep-cluster-address=$(wsrep_cluster_address)

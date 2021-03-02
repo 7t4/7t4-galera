@@ -216,6 +216,16 @@ function cluster_stb(){
     echo "$CLUSTER_STB"
 }
 
+function is_cluster_up(){
+# /usr/bin/mysqladmin ping -h "$host" -P 3306 -p$pass | grep "mysqld is alive"
+  #CHECK="$(nc -z $(wsrep_pc_address) $(wsrep_cluster_port); echo $?)"
+  CHECK="$(nc -z $(wsrep_pc_address) 3306; echo $?)"
+ if [[ "${CHECK}" == "0" ]]; then
+   echo "true"
+ else
+   echo ''
+ fi
+}
 
 function main(){
     case "$1" in
