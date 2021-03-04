@@ -50,10 +50,16 @@ function mysql_password(){
 }
 
 function mysql_shutdown(){
+    NETON="$(nc -z 127.0.0.1 3306; echo $?)"
     MYSQL_SHUT=( "mysqladmin" )
     MYSQL_SHUT+=( "shutdown" )
     MYSQL_SHUT+=( "-u$(mysql_user root)" )
     MYSQL_SHUT+=( "-p$(mysql_password root)" )
+    if [[ -S /var/run/mysqld/mysqld.sock ]]; then
+      MYSQL_SHUT+=( " --socket=/var/run/mysqld/mysqld.sock" )
+    elif [[ "${NETON}" == "0" ]]; then
+      MYSQL_SHUT+=( "--protocol=tcp -h127.0.0.1")
+    fi
     echo "${MYSQL_SHUT[@]}"
 }
 

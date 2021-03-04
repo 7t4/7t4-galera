@@ -15,7 +15,7 @@ function wsrep_node_name(){
     echo "${WSREP_NODE_NAME}"
 }
 
-# Defaults to  nod_address
+# Defaults to  node_address
 function wsrep_node_address(){
     WSREP_NODE_ADDRESS="${WSREP_NODE_ADDRESS:="$(node_address)"}"
     echo "${WSREP_NODE_ADDRESS}"
@@ -81,6 +81,16 @@ function wsrep_pc_address(){
     if [[ -z "${WSREP_PC_ADDRESS}" ]]; then
         # Defaults to lowest ip in Cluster members
         # WSREP_PC_ADDRESS=$(echo "$(wsrep_cluster_members)" | cut -d ',' -f 1 )
+  # short circuit if no other nodes. Theoretically this should only happen
+  # if single service task started or there is a network/swarm dns issue
+  # or if one container gets to this point before others are even up
+  # This still has split brain potential but this case should be extremely rare
+  COUNT="$(service_count)"
+  if [[ "${COUNT}" == "1" ]]; then
+    export WSREP_PC_ADDRESS="$(node_address)"
+    echo "$(node_address)"
+    return
+  fi
     CLUSTER_MEMBERS="$(wsrep_cluster_members)"
     IFS=','
     # Default: Find addr of Task 1 in the service list

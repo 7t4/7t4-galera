@@ -76,6 +76,11 @@ fi
 #    mysqld ${cmd[@]:1} --wsrep-recover
 #fi
 
+# something (lingering client on init functions??) leaving a runnning server
+# trying this before adding a kill -9 or forcing a container restart
+# make sure server is down before starting again
+mysql_shutdown
+
 if [[ $(is_cluster_up) ]]; then
   # simple check for port 3306 on task 1's ip
   echo "Join running cluster..."
